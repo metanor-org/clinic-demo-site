@@ -7,112 +7,159 @@
 <meta name="description" content="A multilingual clinic website and WhatsApp patient assistant by Metanor. Sample demo.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=Hind+Siliguri:wght@500&family=Noto+Naskh+Arabic:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=Hind+Siliguri:wght@500;600&family=Noto+Naskh+Arabic:wght@500;600&display=swap">
 <style>
+  /* Layout: one patient's chat runs through the page, from the hero phone to the front desk. */
   :root {
     color-scheme: light;
-    --navy: #2a4d85; --navy-deep: #1d3762; --navy-ink: #162b4d;
+    --navy: #2a4d85; --navy-deep: #1d3762; --navy-ink: #122440;
     --paper: #f4f6fa; --white: #fff; --line: #d5deeb; --muted: #566a88;
     --sky: #c5d6ef; --coral: #e4644f; --coral-deep: #b9412e;
-    --green: #0b3f30; --gold: #b7924a; --ivory: #fbf8ef;
-    --wa: #128c5e; --chat: #e9e2d8; --chat-out: #d9fdd3;
+    --green: #0b3f30; --gold: #b7924a; --gold-light: #e2c98f; --ivory: #fbf8ef;
+    --chat: #e9e2d8; --chat-out: #d9fdd3; --wa-head: #0b6b58;
     --display: "Fraunces", Georgia, serif;
     --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --script: "Hind Siliguri", "Noto Naskh Arabic", "Nirmala UI", "Segoe UI", sans-serif;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--paper); color: var(--navy-ink); font: 400 17px/1.65 var(--body); }
+  html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body { margin: 0; background: var(--paper); color: var(--navy-ink); font: 400 17px/1.6 var(--body); overflow-x: hidden; }
   h1, h2, h3, p { margin: 0; }
-  h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.15; text-wrap: balance; }
-  h2 { font-size: clamp(1.8rem, 3.6vw, 2.7rem); color: var(--navy-deep); }
-  h3 { font-size: 1.1rem; line-height: 1.4; font-weight: 600; }
+  h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.08; letter-spacing: -.012em; text-wrap: balance; }
+  h2 { font-size: clamp(2rem, 4.6vw, 3.5rem); color: var(--navy-deep); }
+  h3 { font-size: 1.12rem; line-height: 1.35; font-weight: 600; }
   a { color: inherit; }
-  :focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
-  .wrap { width: min(1160px, 100%); margin-inline: auto; padding-inline: max(20px, env(safe-area-inset-left, 0px)); }
-  section { padding-block: clamp(56px, 7vw, 92px); }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; border-radius: 4px; }
+  .wrap { width: min(1200px, 100%); margin-inline: auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+  section { padding-block: clamp(72px, 9vw, 128px); }
+  .kicker { font-weight: 600; font-size: .92rem; color: var(--coral-deep); }
+  .lead { color: var(--muted); font-size: 1.12rem; max-width: 36em; }
+  .head { display: grid; gap: 14px; max-width: 760px; margin-bottom: clamp(36px, 5vw, 64px); }
 
-  /* Hero: Metanor navy with a soft light bloom */
-  .hero {
-    color: #fff; padding-block: 10px clamp(170px, 19vw, 230px);
-    background:
-      radial-gradient(700px 320px at 95% 85%, rgba(197,214,239,.18), transparent 60%),
-      radial-gradient(700px 380px at -10% 110%, rgba(228,100,79,.16), transparent 60%),
-      linear-gradient(180deg, var(--navy) 0, var(--navy) 140px, var(--navy-deep) 100%);
-  }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-  .logo { display: block; height: clamp(62px, 8vw, 88px); width: auto; margin-inline-start: -12px; }
-  .bar a { font-weight: 500; font-size: .95rem; text-decoration: none; white-space: nowrap; padding: 8px 16px; border: 1px solid rgba(255,255,255,.4); border-radius: 8px; }
-  .bar a:hover { background: rgba(255,255,255,.1); }
-  .hero-copy { display: grid; gap: 16px; max-width: 820px; padding-top: clamp(30px, 5vw, 60px); }
-  .eyebrow { color: var(--sky); font-weight: 500; font-size: 1.05rem; }
-  h1 { font-size: clamp(2.7rem, 7vw, 5.2rem); letter-spacing: -.01em; }
-  .lede { font-size: 1.2rem; color: #e2eaf6; max-width: 36em; }
-  .langs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-  .langs span { padding: 4px 14px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); font-size: .95rem; font-weight: 500; }
-  .bn { font-family: "Hind Siliguri", sans-serif; }
-  .ar { font-family: "Noto Naskh Arabic", serif; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 12px 24px; border-radius: 10px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: background .2s, border-color .2s; }
+  .btn-coral { background: var(--coral); color: #fff; }
+  .btn-coral:hover { background: var(--coral-deep); }
+  .btn-ghost { border: 1px solid rgba(255,255,255,.45); color: #fff; }
+  .btn-ghost:hover { background: rgba(255,255,255,.1); }
 
-  /* Two doors overlapping the hero */
-  .doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.5vw, 28px); margin-top: calc(-1 * clamp(140px, 16vw, 190px)); position: relative; }
-  .door { background: var(--white); border-radius: 18px; text-decoration: none; display: grid; grid-template-rows: auto 1fr; overflow: hidden; box-shadow: 0 26px 50px -26px rgba(22,43,77,.6); transition: transform .2s, box-shadow .2s; }
-  .door:hover { transform: translateY(-4px); box-shadow: 0 32px 60px -26px rgba(22,43,77,.7); }
-  .stage { height: clamp(230px, 24vw, 280px); overflow: hidden; display: flex; justify-content: center; align-items: flex-end; padding-inline: 22px; }
-  .stage.web { background: linear-gradient(160deg, #125440, var(--green)); }
-  .stage.chat { background: linear-gradient(160deg, #e8eef8, #d3dff0); }
-  .door-body { padding: 20px 24px 24px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 18px; align-items: center; }
-  .door-body h2 { font-size: clamp(1.4rem, 2.5vw, 1.85rem); }
-  .door-body p { color: var(--muted); font-size: .98rem; grid-column: 1; }
-  .go { grid-row: 1 / span 2; grid-column: 2; background: var(--navy); color: #fff; border-radius: 8px; padding: 10px 18px; font-weight: 600; white-space: nowrap; }
-  .door:hover .go { background: var(--navy-deep); }
+  /* Hero */
+  .hero { position: relative; color: #fff; padding-block: 10px 0; overflow: hidden; background: radial-gradient(620px 460px at 88% 62%, rgba(90,133,201,.45), transparent 68%), radial-gradient(620px 420px at 2% 105%, rgba(228,100,79,.22), transparent 65%), linear-gradient(180deg, var(--navy) 0, var(--navy) 120px, var(--navy-deep) 68%, var(--navy-ink) 100%); }
+  .bar { display: flex; align-items: center; gap: 24px; }
+  .logo { display: block; height: clamp(62px, 7vw, 84px); width: auto; margin-inline-start: -12px; }
+  .bar nav { display: flex; gap: 26px; margin-inline-start: auto; font-size: .96rem; font-weight: 500; }
+  .bar nav a { text-decoration: none; padding-block: 6px; border-bottom: 1px solid transparent; }
+  .bar nav a:hover { border-color: var(--gold-light); }
+  .bar .contact-link { text-decoration: none; font-weight: 500; font-size: .95rem; white-space: nowrap; padding: 8px 16px; border: 1px solid rgba(255,255,255,.4); border-radius: 8px; }
+  .bar .contact-link:hover { background: rgba(255,255,255,.1); }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); gap: clamp(24px, 4vw, 56px); align-items: end; padding-top: clamp(28px, 4vw, 56px); }
+  .hero-copy { display: grid; gap: 22px; padding-bottom: clamp(56px, 7vw, 104px); }
+  .hero .kicker { color: var(--gold-light); }
+  h1 { font-size: clamp(3rem, 6.5vw, 5.7rem); }
+  h1 em { font-style: italic; font-weight: 600; color: var(--gold-light); }
+  .hero .lead { color: #e2eaf6; font-size: 1.2rem; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .lang-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: var(--sky); font-size: .95rem; }
+  .tabs { display: inline-flex; padding: 3px; gap: 2px; border-radius: 10px; background: rgba(255,255,255,.12); }
+  .tabs button { border: 0; background: none; color: #fff; padding: 6px 15px; min-height: 36px; border-radius: 8px; font-family: var(--script); font-weight: 600; }
+  .tabs button[aria-pressed="true"] { background: #fff; color: var(--navy-deep); }
 
-  .mini-site { width: min(100%, 430px); height: 88%; background: var(--ivory); border-radius: 12px 12px 0 0; padding: 12px 16px 0; display: grid; grid-template-rows: auto 1fr; gap: 8px; overflow: hidden; }
-  .mini-site b { font-family: var(--display); color: var(--green); font-size: 1rem; display: flex; justify-content: space-between; }
-  .mini-site b small { font: 500 .72rem var(--body); color: var(--gold); letter-spacing: .04em; }
-  .mini-hero { position: relative; border-radius: 10px 10px 0 0; overflow: hidden; min-height: 180px; background: #e7dfc8; }
-  .mini-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .mini-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,46,35,.85), rgba(8,46,35,0) 60%); }
-  .mini-hero span { position: absolute; z-index: 1; inset-inline: 14px; bottom: 12px; color: #fff; font-weight: 600; font-size: .98rem; line-height: 1.35; }
+  .scene { position: relative; min-height: clamp(470px, 46vw, 590px); }
+  .browser { position: absolute; inset-inline-start: 0; top: 10px; width: 84%; background: var(--ivory); border-radius: 12px 12px 0 0; overflow: hidden; box-shadow: 0 30px 60px -30px rgba(5,15,35,.8); }
+  .chrome { display: flex; gap: 6px; padding: 11px 14px; background: #e9e3d3; }
+  .chrome i { width: 9px; height: 9px; border-radius: 50%; background: #c7bea6; }
+  .site-top { display: flex; align-items: center; gap: 10px; padding: 12px 18px; color: var(--green); font-family: var(--display); font-weight: 600; font-size: 1rem; }
+  .badge { flex: none; width: 28px; height: 32px; padding-top: 4px; border-radius: 14px 14px 2px 2px; background: var(--green); color: var(--gold-light); display: grid; place-items: center; font-size: .62rem; font-weight: 600; }
+  .site-hero { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; min-height: 420px; background: var(--green); color: #fff; padding: 30px 0 0 24px; gap: 14px; }
+  .site-hero h4 { margin: 0; font: 600 clamp(1.4rem, 2.5vw, 2rem)/1.3 var(--script); }
+  .site-arch { align-self: end; justify-self: end; width: 100%; max-width: 170px; aspect-ratio: 520/660; margin-inline-end: 20px; border-radius: 85px 85px 0 0; background: url("demos/clinic-website/assets/facade.svg") center bottom/cover no-repeat; opacity: .9; }
 
-  .mini-phone { width: min(100%, 300px); height: 94%; background: #101a1d; padding: 7px 7px 0; border-radius: 26px 26px 0 0; display: flex; box-shadow: 0 20px 40px -20px rgba(16,26,29,.6); }
-  .mini-screen { flex: 1; min-width: 0; background: var(--chat); border-radius: 20px 20px 0 0; overflow: hidden; display: flex; flex-direction: column; }
-  .mini-head { background: #0b6b58; color: #fff; padding: 8px 12px; font-size: .85rem; font-weight: 600; }
-  .mini-log { padding: 8px; display: flex; flex-direction: column; gap: 5px; font-size: .84rem; line-height: 1.4; }
-  .mini-log span { max-width: 84%; padding: 5px 9px; border-radius: 8px; background: #fff; align-self: flex-start; }
-  .mini-log span.me { background: var(--chat-out); align-self: flex-end; }
-  .mini-log span.tok { background: #fff7e6; border: 1px dashed var(--gold); font-weight: 600; }
+  .phone { position: absolute; inset-inline-end: 0; bottom: 0; width: min(62%, 310px); background: #0c1416; padding: 8px 8px 0; border-radius: 34px 34px 0 0; box-shadow: 0 34px 60px -24px rgba(0,0,0,.75); }
+  .screen { background: var(--chat); border-radius: 27px 27px 0 0; overflow: hidden; height: clamp(400px, 37vw, 500px); display: flex; flex-direction: column; color: #16211c; }
+  .chat-head { background: var(--wa-head); color: #fff; padding: 14px 14px 11px; display: flex; gap: 9px; align-items: center; font-size: .9rem; font-weight: 600; font-family: var(--script); }
+  .chat-head .av { flex: none; width: 28px; height: 28px; border-radius: 50%; background: #f7e9bd; color: #6e500f; font: 700 .68rem var(--body); display: grid; place-items: center; }
+  .log { flex: 1; padding: 12px 9px; display: flex; flex-direction: column; gap: 7px; font: 500 .92rem/1.45 var(--script); overflow: hidden; }
+  .bubble { max-width: 86%; padding: 6px 10px; border-radius: 9px; background: #fff; align-self: flex-start; box-shadow: 0 1px 1px rgba(0,0,0,.1); animation: pop .32s ease-out backwards; }
+  .bubble.me { background: var(--chat-out); align-self: flex-end; }
+  .token { background: #eaf4ee; border: 1px solid #bfdccd; }
+  .token b { display: block; font: 700 1.3rem var(--body); color: var(--green); }
+  .bubble:nth-child(2) { animation-delay: .1s; } .bubble:nth-child(3) { animation-delay: .2s; } .bubble:nth-child(4) { animation-delay: .3s; } .bubble:nth-child(5) { animation-delay: .4s; }
+  @keyframes pop { from { transform: translateY(8px) scale(.98); } }
 
-  /* Problems and fixes */
-  .head { display: grid; gap: 8px; max-width: 640px; margin-bottom: clamp(24px, 4vw, 40px); }
-  .head p { color: var(--muted); }
-  .fixes { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--navy); }
-  .fixes li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 6px clamp(20px, 5vw, 60px); padding: 18px 0; border-bottom: 1px solid var(--line); }
-  .fixes h3 { color: var(--coral-deep); }
+  /* Journey */
+  .journey { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); counter-reset: s; position: relative; }
+  .journey::before { content: ""; position: absolute; top: 25px; inset-inline: 10% 10%; border-top: 2px dashed var(--sky); }
+  .journey li { counter-increment: s; position: relative; display: grid; gap: 8px; justify-items: center; text-align: center; padding-inline: 12px; align-content: start; }
+  .journey li::before { content: counter(s); width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--navy); color: #fff; font: 700 1.3rem var(--display); box-shadow: 0 0 0 8px var(--paper); position: relative; }
+  .journey li:last-child::before { background: var(--coral); }
+  .journey h3 { margin-top: 8px; }
+  .journey p { color: var(--muted); font-size: .97rem; }
 
-  /* Features */
-  .feat-band { background: var(--white); }
-  .feats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 22px); }
-  .feat { border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 6px; align-content: start; background: linear-gradient(180deg, #fff, #f8fafd); }
-  .feat i { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: #e7eef9; color: var(--navy); font-style: normal; font-weight: 700; margin-bottom: 6px; }
-  .feat p { color: var(--muted); font-size: .97rem; }
+  /* Product panels: real demos, scaled down */
+  .products { background: var(--navy-ink); color: #fff; }
+  .products h2 { color: #fff; }
+  .products .kicker { color: var(--gold-light); }
+  .products .lead { color: var(--sky); }
+  .product { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 68px); align-items: center; text-decoration: none; }
+  .product + .product { margin-top: clamp(56px, 7vw, 96px); }
+  .product.flip { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); }
+  .product.flip .shot { order: 2; }
+  .shot { position: relative; aspect-ratio: 1320/820; overflow: hidden; border-radius: 12px; background: var(--navy-deep); box-shadow: 0 0 0 1px rgba(197,214,239,.25), 0 34px 60px -30px #000; transition: transform .25s; }
+  .product:hover .shot { transform: translateY(-5px); }
+  .shot iframe { position: absolute; top: 0; left: 0; width: 1320px; height: 820px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .product-copy { display: grid; gap: 14px; justify-items: start; }
+  .product-copy h3 { font: 700 clamp(1.7rem, 3vw, 2.5rem)/1.12 var(--display); }
+  .product-copy p { color: var(--sky); }
+  .ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; color: #e2eaf6; font-size: .98rem; }
+  .ticks li::before { content: "✓"; color: var(--gold-light); margin-inline-end: 9px; font-weight: 600; }
+  .open { display: inline-flex; margin-top: 6px; padding: 11px 20px; border-radius: 9px; background: #fff; color: var(--navy-deep); font-weight: 600; }
+  .product:hover .open { background: var(--gold-light); }
 
-  .contact { color: #fff; background: linear-gradient(160deg, var(--navy-deep), var(--navy-ink)); }
-  .contact-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) auto; gap: clamp(24px, 6vw, 70px); align-items: center; }
-  .contact h2 { color: #fff; margin-bottom: 10px; }
-  .contact p { color: var(--sky); }
-  .btn { display: inline-flex; align-items: center; min-height: 52px; padding: 12px 26px; border-radius: 10px; font-weight: 600; text-decoration: none; background: var(--coral); color: #fff; white-space: nowrap; }
-  .btn:hover { background: var(--coral-deep); }
-  footer { background: var(--navy-ink); color: var(--sky); padding-block: 16px; font-size: .86rem; border-top: 1px solid rgba(255,255,255,.08); }
+  /* Who handles what */
+  .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-radius: 18px; overflow: hidden; box-shadow: 0 26px 50px -34px rgba(22,43,77,.6); }
+  .side { padding: clamp(26px, 4vw, 48px); display: grid; gap: 18px; align-content: start; }
+  .side.bot { background: var(--white); }
+  .side.staff { background: var(--navy); color: #fff; }
+  .side h3 { font: 700 clamp(1.5rem, 2.6vw, 2.1rem)/1.15 var(--display); }
+  .side ul { list-style: none; margin: 0; padding: 0; display: grid; }
+  .side li { padding-block: 12px; border-top: 1px solid var(--line); }
+  .side.staff li { border-color: rgba(255,255,255,.2); }
+  .note { margin-top: 18px; color: var(--muted); max-width: 46em; }
+
+  .gains { background: var(--white); }
+  .gain-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--navy); }
+  .gain-list li { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 6px clamp(20px, 6vw, 80px); padding-block: 22px; border-bottom: 1px solid var(--line); align-items: baseline; }
+  .gain-list h3 { font: 600 clamp(1.2rem, 2vw, 1.55rem)/1.25 var(--display); color: var(--coral-deep); }
+
+  .contact { color: #fff; background: radial-gradient(620px 340px at 88% 0, rgba(228,100,79,.3), transparent 65%), linear-gradient(160deg, var(--navy), var(--navy-deep)); }
+  .contact-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) auto; gap: clamp(24px, 6vw, 70px); align-items: end; }
+  .contact h2 { color: #fff; margin-bottom: 14px; font-size: clamp(2.3rem, 5.6vw, 4.4rem); }
+  .contact p { color: var(--sky); font-size: 1.12rem; max-width: 34em; }
+  footer { background: var(--navy-ink); color: var(--sky); padding-block: 18px; font-size: .86rem; }
   .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; }
 
-  @media (max-width: 860px) {
-    .doors, .contact-grid, .fixes li { grid-template-columns: minmax(0, 1fr); }
-    .feats { grid-template-columns: minmax(0, 1fr); }
+  @media (max-width: 980px) {
+    .bar nav { display: none; }
+    .bar .contact-link { margin-inline-start: auto; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr); }
+    .hero-copy { padding-bottom: 8px; }
+    .scene { min-height: 500px; width: min(100%, 560px); margin-inline: auto; }
+    .journey { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+    .journey::before { top: 20px; bottom: 60px; inset-inline: 25px auto; border-top: 0; border-inline-start: 2px dashed var(--sky); }
+    .journey li { grid-template-columns: 52px minmax(0, 1fr); justify-items: start; text-align: start; padding-inline: 0; column-gap: 18px; }
+    .journey li::before { grid-row: span 2; }
+    .journey h3 { margin-top: 0; }
+    .product, .product.flip, .split, .contact-grid, .gain-list li { grid-template-columns: minmax(0, 1fr); }
+    .product.flip .shot { order: 0; }
   }
-  @media (max-width: 560px) {
-    .door-body { grid-template-columns: minmax(0, 1fr); }
-    .go { grid-row: auto; grid-column: 1; justify-self: start; margin-top: 8px; }
+  @media (max-width: 480px) {
+    .cta .btn { width: 100%; }
+    .scene { min-height: 450px; }
+    .browser { display: none; }
+    .phone { inset-inline: 0; margin-inline: auto; width: min(84%, 310px); }
+    .contact .btn { white-space: normal; overflow-wrap: anywhere; }
   }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .door { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .bubble { animation: none; } .shot, .btn { transition: none; } }
 </style>
 </head>
 <body>
@@ -121,85 +168,138 @@
   <div class="wrap">
     <div class="bar">
       <img class="logo" src="assets/metanor-logo.png" alt="Metanor" width="614" height="200">
-      <a href="#contact">Contact us</a>
+      <nav aria-label="Main">
+        <a href="#journey">How it works</a>
+        <a href="#demos">Demos</a>
+        <a href="#staff">Your staff</a>
+      </nav>
+      <a class="contact-link" href="#contact">Contact us</a>
     </div>
-    <div class="hero-copy">
-      <p class="eyebrow">Metanor solutions for clinics</p>
-      <h1>Metanor Clinic Suite</h1>
-      <p class="lede">A website your patients can read in their own language, and a WhatsApp assistant that answers them, books their visit and hands over to your staff. Try both demos below.</p>
-      <div class="langs" aria-label="Languages"><span class="bn" lang="bn">বাংলা</span><span>English</span><span class="ar" lang="ar" dir="rtl">العربية</span></div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="kicker">Metanor Clinic Suite</p>
+        <h1>Every patient answered, <em>in their own language.</em></h1>
+        <p class="lead">A clinic website and WhatsApp assistant that answer common questions, book visits and pass the rest to your staff.</p>
+        <div class="cta">
+          <a class="btn btn-coral" href="demos/whatsapp-assistant/">Try the WhatsApp demo</a>
+          <a class="btn btn-ghost" href="demos/clinic-website/">View the clinic website</a>
+        </div>
+        <div class="lang-row">
+          <span id="langLabel">See it in</span>
+          <div class="tabs" role="group" aria-labelledby="langLabel">
+            <button type="button" data-lang="bn" lang="bn" aria-pressed="false">বাংলা</button>
+            <button type="button" data-lang="en" lang="en" aria-pressed="true">English</button>
+            <button type="button" data-lang="ar" lang="ar" aria-pressed="false">العربية</button>
+          </div>
+        </div>
+      </div>
+      <div class="scene" aria-label="Sample clinic website and WhatsApp booking chat" role="img">
+        <div class="browser">
+          <div class="chrome"><i></i><i></i><i></i></div>
+          <div class="site-top"><span class="badge">SM</span><span id="siteName">Sample Medical Complex</span></div>
+          <div class="site-hero" id="siteHero"><h4 id="siteTitle">Care in your language, here in Madinah</h4><div class="site-arch"></div></div>
+        </div>
+        <div class="phone"><div class="screen" id="screen">
+          <div class="chat-head"><span class="av">SM</span><span id="chatName">Sample Medical Complex</span></div>
+          <div class="log" id="log">
+            <div class="bubble">Assalamu alaikum! How can I help?</div>
+            <div class="bubble me">I want to see a doctor on Friday</div>
+            <div class="bubble">What time would you like?</div>
+            <div class="bubble me">5:30 PM</div>
+            <div class="bubble token"><span>Your appointment is booked. Your token number:</span><b>A-17</b></div>
+          </div>
+        </div></div>
+      </div>
     </div>
   </div>
 </header>
 
 <main>
-  <div class="wrap doors">
-    <a class="door" href="demos/clinic-website/">
-      <div class="stage web" aria-hidden="true">
-        <div class="mini-site">
-          <b>Sample Family Clinic <small>বাংলা · EN · عربي</small></b>
-          <div class="mini-hero"><img src="demos/clinic-website/assets/facade.svg" alt=""><span>Family care, close to home</span></div>
-        </div>
-      </div>
-      <div class="door-body">
-        <h2>Clinic website</h2>
-        <span class="go">View site</span>
-        <p>In Bengali, English and Arabic, with services, doctors and WhatsApp booking.</p>
-      </div>
-    </a>
-    <a class="door" href="demos/whatsapp-assistant/">
-      <div class="stage chat" aria-hidden="true">
-        <div class="mini-phone"><div class="mini-screen">
-          <div class="mini-head">Sample Family Clinic</div>
-          <div class="mini-log">
-            <span>Assalamu alaikum! How can we help today?</span>
-            <span class="me">I'd like to book a visit</span>
-            <span>Done. Your booking token is ready:</span>
-            <span class="tok">Token A-14 · Tue 10:30</span>
-          </div>
-        </div></div>
-      </div>
-      <div class="door-body">
-        <h2>WhatsApp assistant</h2>
-        <span class="go">Try the demo</span>
-        <p>Patient chats, booking tokens, staff handover and a campaign view.</p>
-      </div>
-    </a>
-  </div>
-
-  <section>
+  <section id="journey">
     <div class="wrap">
-      <div class="head"><h2>Where do clinics lose patients?</h2><p>Four everyday problems, each with a practical fix.</p></div>
-      <ul class="fixes">
-        <li><h3>Messages left unanswered</h3><p>The assistant replies instantly about timings, services and location, and takes bookings at any hour.</p></li>
-        <li><h3>Long waits at the front desk</h3><p>Patients receive a booking token on WhatsApp and arrive at the right time.</p></li>
-        <li><h3>Patients who can't read the website</h3><p>Every page is available in Bengali, English and Arabic, switched with one tap.</p></li>
-        <li><h3>Reminders that never go out</h3><p>The campaign view sends health reminders and clinic announcements to the right patients.</p></li>
-      </ul>
+      <div class="head">
+        <p class="kicker">How it works</p>
+        <h2>From a flyer to the front desk, without the back-and-forth.</h2>
+      </div>
+      <ol class="journey">
+        <li><h3>Scan</h3><p>A QR code on a flyer or ad opens the clinic's chat.</p></li>
+        <li><h3>Ask</h3><p>Patients get fees, hours and directions in their language.</p></li>
+        <li><h3>Book</h3><p>They choose a department and time in a few taps.</p></li>
+        <li><h3>Get reminded</h3><p>A reminder lets them confirm, change or cancel.</p></li>
+        <li><h3>Arrive</h3><p>They show their token at reception, and staff know who's coming.</p></li>
+      </ol>
     </div>
   </section>
 
-  <section class="feat-band">
+  <section class="products" id="demos">
     <div class="wrap">
-      <div class="head"><h2>What's included</h2><p>Everything is tailored to your clinic's services, doctors, timings and branding.</p></div>
-      <div class="feats">
-        <div class="feat"><i>1</i><h3>Multilingual website</h3><p>A premium, mobile-friendly site in three languages.</p></div>
-        <div class="feat"><i>2</i><h3>WhatsApp booking</h3><p>Patients book from the app they already use every day.</p></div>
-        <div class="feat"><i>3</i><h3>Staff handover</h3><p>Any chat can be passed to a person whenever it's needed.</p></div>
-        <div class="feat"><i>4</i><h3>Booking tokens</h3><p>Clear queue numbers and visit times sent to the patient.</p></div>
-        <div class="feat"><i>5</i><h3>Campaigns</h3><p>Vaccination drives, new clinic hours and follow-up reminders.</p></div>
-        <div class="feat"><i>6</i><h3>Set up for you</h3><p>We configure it with your clinic's details and get you started.</p></div>
+      <div class="head">
+        <p class="kicker">Two live demos</p>
+        <h2>Open them and try them yourself.</h2>
+        <p class="lead">Both use a sample clinic, so you can click through everything safely.</p>
       </div>
+      <a class="product" href="demos/clinic-website/">
+        <div class="shot"><iframe src="demos/clinic-website/" title="Clinic website preview" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="product-copy">
+          <h3>A clinic website patients can actually read</h3>
+          <p>Hours, directions, departments and WhatsApp booking, all easy to find.</p>
+          <ul class="ticks"><li>Bengali, English and Arabic</li><li>Built for phones</li><li>Prepares a WhatsApp booking message</li></ul>
+          <span class="open">View the website</span>
+        </div>
+      </a>
+      <a class="product flip" href="demos/whatsapp-assistant/">
+        <div class="shot"><iframe src="demos/whatsapp-assistant/" title="WhatsApp assistant preview" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="product-copy">
+          <h3>A front desk that answers on WhatsApp</h3>
+          <p>Follow a patient from their first question to a booked visit, and see the clinic's side too.</p>
+          <ul class="ticks"><li>Scripted patient scenarios</li><li>Booking tokens and reminders</li><li>Staff handover and a campaign view</li></ul>
+          <span class="open">Try the assistant</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section id="staff">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Your staff stay in charge</p>
+        <h2>The routine goes to the assistant. The judgment stays with people.</h2>
+      </div>
+      <div class="split">
+        <div class="side bot">
+          <h3>The assistant handles</h3>
+          <ul><li>Hours, location and offers you've approved</li><li>Choosing a department and time</li><li>Booking tokens and reminders</li><li>Changes and cancellations</li></ul>
+        </div>
+        <div class="side staff">
+          <h3>Your team handles</h3>
+          <ul><li>Medical questions and advice</li><li>Possible emergencies, with an instant alert</li><li>Insurance and special requests</li><li>Anything the assistant isn't sure about</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gains">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Why clinics need it</p>
+        <h2>Four places patients slip away.</h2>
+      </div>
+      <ul class="gain-list">
+        <li><h3>Messages left unanswered</h3><p>Common questions get an instant reply, even after hours.</p></li>
+        <li><h3>A crowded front desk</h3><p>Time slots and token numbers help spread out busy days.</p></li>
+        <li><h3>A website patients can't read</h3><p>Every page switches between Bengali, English and Arabic.</p></li>
+        <li><h3>Ads you can't measure</h3><p>Each flyer and campaign gets its own link, so you can see what brings people in.</p></li>
+      </ul>
     </div>
   </section>
 
   <section class="contact" id="contact">
     <div class="wrap contact-grid">
       <div>
-        <h2>Bring this to your clinic</h2>
-        <p>Tell us about your clinic and we'll show you how it would look with your own services and branding.</p>
+        <h2>See it with your clinic's name on it.</h2>
+        <p>Tell us about your clinic, and we'll show you how this would look with your services, doctors and branding.</p>
       </div>
-      <a class="btn" href="mailto:contact@metanor.org?subject=Metanor%20Clinic%20Suite">contact@metanor.org</a>
+      <a class="btn btn-coral" href="mailto:contact@metanor.org?subject=Metanor%20Clinic%20Suite">contact@metanor.org</a>
     </div>
   </section>
 </main>
@@ -210,5 +310,53 @@
     <span>Demos only. Sample data, not connected to a clinic, WhatsApp or patient records.</span>
   </div>
 </footer>
+
+<script>
+(() => {
+  const T = {
+    en: { dir: 'ltr', name: 'Sample Medical Complex', title: 'Care in your language, here in Madinah', chat: ['Assalamu alaikum! How can I help?', 'I want to see a doctor on Friday', 'What time would you like?', '5:30 PM'], booked: 'Your appointment is booked. Your token number:' },
+    bn: { dir: 'ltr', name: 'স্যাম্পল মেডিকেল কমপ্লেক্স', title: 'মদিনায়, আপনার ভাষায় চিকিৎসা', chat: ['আসসালামু আলাইকুম! কীভাবে সাহায্য করতে পারি?', 'শুক্রবার ডাক্তার দেখাতে চাই', 'কোন সময়ে আসতে চান?', 'বিকাল ৫:৩০'], booked: 'আপনার অ্যাপয়েন্টমেন্ট বুক হয়েছে। আপনার টোকেন নম্বর:' },
+    ar: { dir: 'rtl', name: 'المجمع الطبي النموذجي', title: 'رعاية بلغتك في المدينة المنورة', chat: ['السلام عليكم! كيف يمكنني مساعدتك؟', 'أريد مقابلة طبيب يوم الجمعة', 'ما الوقت المناسب لك؟', '5:30 م'], booked: 'تم حجز موعدك. رقم الدور:' }
+  };
+  const $ = id => document.getElementById(id);
+  const log = $('log');
+
+  function setLang(code) {
+    const t = T[code];
+    ['screen', 'siteHero'].forEach(id => { $(id).dir = t.dir; $(id).lang = code; });
+    $('siteName').textContent = t.name;
+    $('chatName').textContent = t.name;
+    $('siteTitle').textContent = t.title;
+    log.textContent = '';
+    t.chat.forEach((text, i) => {
+      const b = document.createElement('div');
+      b.className = 'bubble' + (i % 2 ? ' me' : '');
+      b.textContent = text;
+      log.append(b);
+    });
+    const token = document.createElement('div');
+    token.className = 'bubble token';
+    const label = document.createElement('span');
+    label.textContent = t.booked;
+    const num = document.createElement('b');
+    num.textContent = 'A-17';
+    token.append(label, num);
+    log.append(token);
+    document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === code)));
+  }
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+
+  // Keeps each real demo preview scaled to its frame.
+  const fit = shot => { shot.firstElementChild.style.transform = `scale(${shot.clientWidth / 1320})`; };
+  const shots = document.querySelectorAll('.shot');
+  shots.forEach(fit);
+  if ('ResizeObserver' in window) {
+    const watcher = new ResizeObserver(entries => entries.forEach(e => fit(e.target)));
+    shots.forEach(s => watcher.observe(s));
+  } else {
+    addEventListener('resize', () => shots.forEach(fit));
+  }
+})();
+</script>
 </body>
 </html>
