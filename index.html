@@ -1,214 +1,396 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Metanor Clinic Suite</title>
 <meta name="description" content="A multilingual clinic website and WhatsApp patient assistant by Metanor. Sample demo.">
+<script>(function(){var l='ar';try{var s=localStorage.getItem('clinicSuiteLang');if(s==='en'||s==='bn'||s==='ar')l=s;}catch(e){}document.documentElement.lang=l;document.documentElement.dir=l==='ar'?'rtl':'ltr';})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=Hind+Siliguri:wght@500&family=Noto+Naskh+Arabic:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600&family=Noto+Naskh+Arabic:wght@500;600&family=Alexandria:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
 <style>
+  /* Layout: one patient's chat runs through the page, from the hero phone to the front desk. */
   :root {
     color-scheme: light;
-    --navy: #2a4d85; --navy-deep: #1d3762; --navy-ink: #162b4d;
+    --navy: #2a4d85; --navy-deep: #1d3762; --navy-ink: #122440;
     --paper: #f4f6fa; --white: #fff; --line: #d5deeb; --muted: #566a88;
     --sky: #c5d6ef; --coral: #e4644f; --coral-deep: #b9412e;
-    --green: #0b3f30; --gold: #b7924a; --ivory: #fbf8ef;
-    --wa: #128c5e; --chat: #e9e2d8; --chat-out: #d9fdd3;
+    --green: #0b3f30; --gold: #b7924a; --gold-light: #e2c98f; --ivory: #fbf8ef;
+    --chat: #e9e2d8; --chat-out: #d9fdd3; --wa-head: #0b6b58;
     --display: "Fraunces", Georgia, serif;
     --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --script: "Hind Siliguri", "Noto Naskh Arabic", "Nirmala UI", "Segoe UI", sans-serif;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--paper); color: var(--navy-ink); font: 400 17px/1.65 var(--body); }
+  html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body { margin: 0; background: var(--paper); color: var(--navy-ink); font: 400 17px/1.6 var(--body); overflow-x: hidden; }
   h1, h2, h3, p { margin: 0; }
-  h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.15; text-wrap: balance; }
-  h2 { font-size: clamp(1.8rem, 3.6vw, 2.7rem); color: var(--navy-deep); }
-  h3 { font-size: 1.1rem; line-height: 1.4; font-weight: 600; }
+  h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1.08; letter-spacing: -.012em; text-wrap: balance; }
+  h2 { font-size: clamp(2rem, 4.6vw, 3.5rem); color: var(--navy-deep); }
+  h3 { font-size: 1.12rem; line-height: 1.35; font-weight: 600; }
   a { color: inherit; }
-  :focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
-  .wrap { width: min(1160px, 100%); margin-inline: auto; padding-inline: max(20px, env(safe-area-inset-left, 0px)); }
-  section { padding-block: clamp(56px, 7vw, 92px); }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; border-radius: 4px; }
+  .wrap { width: min(1200px, 100%); margin-inline: auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+  section { padding-block: clamp(72px, 9vw, 128px); }
+  .kicker { font-weight: 600; font-size: .92rem; color: var(--coral-deep); }
+  .lead { color: var(--muted); font-size: 1.12rem; max-width: 36em; }
+  .head { display: grid; gap: 14px; max-width: 760px; margin-bottom: clamp(36px, 5vw, 64px); }
 
-  /* Hero: Metanor navy with a soft light bloom */
-  .hero {
-    color: #fff; padding-block: 10px clamp(170px, 19vw, 230px);
-    background:
-      radial-gradient(700px 320px at 95% 85%, rgba(197,214,239,.18), transparent 60%),
-      radial-gradient(700px 380px at -10% 110%, rgba(228,100,79,.16), transparent 60%),
-      linear-gradient(180deg, var(--navy) 0, var(--navy) 140px, var(--navy-deep) 100%);
-  }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-  .logo { display: block; height: clamp(62px, 8vw, 88px); width: auto; margin-inline-start: -12px; }
-  .bar a { font-weight: 500; font-size: .95rem; text-decoration: none; white-space: nowrap; padding: 8px 16px; border: 1px solid rgba(255,255,255,.4); border-radius: 8px; }
-  .bar a:hover { background: rgba(255,255,255,.1); }
-  .hero-copy { display: grid; gap: 16px; max-width: 820px; padding-top: clamp(30px, 5vw, 60px); }
-  .eyebrow { color: var(--sky); font-weight: 500; font-size: 1.05rem; }
-  h1 { font-size: clamp(2.7rem, 7vw, 5.2rem); letter-spacing: -.01em; }
-  .lede { font-size: 1.2rem; color: #e2eaf6; max-width: 36em; }
-  .langs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-  .langs span { padding: 4px 14px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); font-size: .95rem; font-weight: 500; }
-  .bn { font-family: "Hind Siliguri", sans-serif; }
-  .ar { font-family: "Noto Naskh Arabic", serif; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 12px 24px; border-radius: 10px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: background .2s, border-color .2s; }
+  .btn-coral { background: var(--coral); color: #fff; }
+  .btn-coral:hover { background: var(--coral-deep); }
+  .btn-ghost { border: 1px solid rgba(255,255,255,.45); color: #fff; }
+  .btn-ghost:hover { background: rgba(255,255,255,.1); }
 
-  /* Two doors overlapping the hero */
-  .doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.5vw, 28px); margin-top: calc(-1 * clamp(140px, 16vw, 190px)); position: relative; }
-  .door { background: var(--white); border-radius: 18px; text-decoration: none; display: grid; grid-template-rows: auto 1fr; overflow: hidden; box-shadow: 0 26px 50px -26px rgba(22,43,77,.6); transition: transform .2s, box-shadow .2s; }
-  .door:hover { transform: translateY(-4px); box-shadow: 0 32px 60px -26px rgba(22,43,77,.7); }
-  .stage { height: clamp(230px, 24vw, 280px); overflow: hidden; display: flex; justify-content: center; align-items: flex-end; padding-inline: 22px; }
-  .stage.web { background: linear-gradient(160deg, #125440, var(--green)); }
-  .stage.chat { background: linear-gradient(160deg, #e8eef8, #d3dff0); }
-  .door-body { padding: 20px 24px 24px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 18px; align-items: center; }
-  .door-body h2 { font-size: clamp(1.4rem, 2.5vw, 1.85rem); }
-  .door-body p { color: var(--muted); font-size: .98rem; grid-column: 1; }
-  .go { grid-row: 1 / span 2; grid-column: 2; background: var(--navy); color: #fff; border-radius: 8px; padding: 10px 18px; font-weight: 600; white-space: nowrap; }
-  .door:hover .go { background: var(--navy-deep); }
+  /* Hero */
+  .hero { position: relative; color: #fff; padding-block: 10px 0; overflow: hidden; background: radial-gradient(620px 460px at 88% 62%, rgba(90,133,201,.45), transparent 68%), radial-gradient(620px 420px at 2% 105%, rgba(228,100,79,.22), transparent 65%), linear-gradient(180deg, var(--navy) 0, var(--navy) 120px, var(--navy-deep) 68%, var(--navy-ink) 100%); }
+  .bar { display: flex; align-items: center; gap: 24px; }
+  .logo { display: block; height: clamp(62px, 7vw, 84px); width: auto; margin-inline-start: -12px; }
+  .bar nav { display: flex; gap: 22px; margin-inline-start: auto; white-space: nowrap; font-size: .96rem; font-weight: 500; }
+  .bar nav a { text-decoration: none; padding-block: 6px; border-bottom: 1px solid transparent; }
+  .bar nav a:hover { border-color: var(--gold-light); }
+  .bar .contact-link { text-decoration: none; font-weight: 500; font-size: .95rem; white-space: nowrap; padding: 8px 16px; border: 1px solid rgba(255,255,255,.4); border-radius: 8px; }
+  .bar .contact-link:hover { background: rgba(255,255,255,.1); }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); gap: clamp(24px, 4vw, 56px); align-items: end; padding-top: clamp(28px, 4vw, 56px); }
+  .hero-copy { display: grid; gap: 22px; padding-bottom: clamp(56px, 7vw, 104px); }
+  .hero .kicker { color: var(--gold-light); }
+  h1 { font-size: clamp(3rem, 6.5vw, 5.7rem); }
+  h1 em { font-style: italic; font-weight: 600; color: var(--gold-light); }
+  .hero .lead { color: #e2eaf6; font-size: 1.2rem; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .lang-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: var(--sky); font-size: .95rem; }
+  .tabs { display: inline-flex; padding: 3px; gap: 2px; border-radius: 10px; background: rgba(255,255,255,.12); }
+  .tabs button { border: 0; background: none; color: #fff; padding: 6px 15px; min-height: 36px; border-radius: 8px; font-family: var(--script); font-weight: 600; }
+  .tabs button[aria-pressed="true"] { background: #fff; color: var(--navy-deep); }
 
-  .mini-site { width: min(100%, 430px); height: 88%; background: var(--ivory); border-radius: 12px 12px 0 0; padding: 12px 16px 0; display: grid; grid-template-rows: auto 1fr; gap: 8px; overflow: hidden; }
-  .mini-site b { font-family: var(--display); color: var(--green); font-size: 1rem; display: flex; justify-content: space-between; }
-  .mini-site b small { font: 500 .72rem var(--body); color: var(--gold); letter-spacing: .04em; }
-  .mini-hero { position: relative; border-radius: 10px 10px 0 0; overflow: hidden; min-height: 180px; background: #e7dfc8; }
-  .mini-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .mini-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,46,35,.85), rgba(8,46,35,0) 60%); }
-  .mini-hero span { position: absolute; z-index: 1; inset-inline: 14px; bottom: 12px; color: #fff; font-weight: 600; font-size: .98rem; line-height: 1.35; }
+  .scene { position: relative; min-height: clamp(470px, 46vw, 590px); }
+  .browser { position: absolute; inset-inline-start: 0; top: 10px; width: 84%; background: var(--ivory); border-radius: 12px 12px 0 0; overflow: hidden; box-shadow: 0 30px 60px -30px rgba(5,15,35,.8); }
+  .chrome { display: flex; gap: 6px; padding: 11px 14px; background: #e9e3d3; }
+  .chrome i { width: 9px; height: 9px; border-radius: 50%; background: #c7bea6; }
+  .site-top { display: flex; align-items: center; gap: 10px; padding: 12px 18px; color: var(--green); font-family: var(--display); font-weight: 600; font-size: 1rem; }
+  .badge { flex: none; width: 28px; height: 32px; padding-top: 4px; border-radius: 14px 14px 2px 2px; background: var(--green); color: var(--gold-light); display: grid; place-items: center; font-size: .62rem; font-weight: 600; }
+  .site-hero { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; min-height: 420px; background: var(--green); color: #fff; padding: 30px 0 0 24px; gap: 14px; }
+  .site-hero h4 { margin: 0; font: 600 clamp(1.4rem, 2.5vw, 2rem)/1.3 var(--script); }
+  .site-arch { align-self: end; justify-self: end; width: 100%; max-width: 170px; aspect-ratio: 520/660; margin-inline-end: 20px; border-radius: 85px 85px 0 0; background: url("demos/clinic-website/assets/photos/doctor-hero.jpg") 56% 0/cover no-repeat; }
 
-  .mini-phone { width: min(100%, 300px); height: 94%; background: #101a1d; padding: 7px 7px 0; border-radius: 26px 26px 0 0; display: flex; box-shadow: 0 20px 40px -20px rgba(16,26,29,.6); }
-  .mini-screen { flex: 1; min-width: 0; background: var(--chat); border-radius: 20px 20px 0 0; overflow: hidden; display: flex; flex-direction: column; }
-  .mini-head { background: #0b6b58; color: #fff; padding: 8px 12px; font-size: .85rem; font-weight: 600; }
-  .mini-log { padding: 8px; display: flex; flex-direction: column; gap: 5px; font-size: .84rem; line-height: 1.4; }
-  .mini-log span { max-width: 84%; padding: 5px 9px; border-radius: 8px; background: #fff; align-self: flex-start; }
-  .mini-log span.me { background: var(--chat-out); align-self: flex-end; }
-  .mini-log span.tok { background: #fff7e6; border: 1px dashed var(--gold); font-weight: 600; }
+  .phone { position: absolute; inset-inline-end: 0; bottom: 0; width: min(62%, 310px); background: #0c1416; padding: 8px 8px 0; border-radius: 34px 34px 0 0; box-shadow: 0 34px 60px -24px rgba(0,0,0,.75); }
+  .screen { background: var(--chat); border-radius: 27px 27px 0 0; overflow: hidden; height: clamp(400px, 37vw, 500px); display: flex; flex-direction: column; color: #16211c; }
+  .chat-head { background: var(--wa-head); color: #fff; padding: 14px 14px 11px; display: flex; gap: 9px; align-items: center; font-size: .9rem; font-weight: 600; font-family: var(--script); }
+  .chat-head .av { flex: none; width: 28px; height: 28px; border-radius: 50%; background: #f7e9bd; color: #6e500f; font: 700 .68rem var(--body); display: grid; place-items: center; }
+  .log { flex: 1; padding: 12px 9px; display: flex; flex-direction: column; gap: 7px; font: 500 .92rem/1.45 var(--script); overflow: hidden; }
+  .bubble { max-width: 86%; padding: 6px 10px; border-radius: 9px; background: #fff; align-self: flex-start; box-shadow: 0 1px 1px rgba(0,0,0,.1); animation: pop .32s ease-out backwards; }
+  .bubble.me { background: var(--chat-out); align-self: flex-end; }
+  .token { background: #eaf4ee; border: 1px solid #bfdccd; }
+  .token b { display: block; font: 700 1.3rem var(--body); color: var(--green); }
+  .bubble:nth-child(2) { animation-delay: .1s; } .bubble:nth-child(3) { animation-delay: .2s; } .bubble:nth-child(4) { animation-delay: .3s; } .bubble:nth-child(5) { animation-delay: .4s; }
+  @keyframes pop { from { transform: translateY(8px) scale(.98); } }
 
-  /* Problems and fixes */
-  .head { display: grid; gap: 8px; max-width: 640px; margin-bottom: clamp(24px, 4vw, 40px); }
-  .head p { color: var(--muted); }
-  .fixes { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--navy); }
-  .fixes li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 6px clamp(20px, 5vw, 60px); padding: 18px 0; border-bottom: 1px solid var(--line); }
-  .fixes h3 { color: var(--coral-deep); }
+  /* Journey */
+  .journey { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); counter-reset: s; position: relative; }
+  .journey::before { content: ""; position: absolute; top: 25px; inset-inline: 10% 10%; border-top: 2px dashed var(--sky); }
+  .journey li { counter-increment: s; position: relative; display: grid; gap: 8px; justify-items: center; text-align: center; padding-inline: 12px; align-content: start; }
+  .journey li::before { content: counter(s); width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--navy); color: #fff; font: 700 1.3rem var(--display); box-shadow: 0 0 0 8px var(--paper); position: relative; }
+  .journey li:last-child::before { background: var(--coral); }
+  .journey h3 { margin-top: 8px; }
+  .journey p { color: var(--muted); font-size: .97rem; }
 
-  /* Features */
-  .feat-band { background: var(--white); }
-  .feats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 22px); }
-  .feat { border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 6px; align-content: start; background: linear-gradient(180deg, #fff, #f8fafd); }
-  .feat i { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: #e7eef9; color: var(--navy); font-style: normal; font-weight: 700; margin-bottom: 6px; }
-  .feat p { color: var(--muted); font-size: .97rem; }
+  /* Product panels: real demos, scaled down */
+  .products { background: var(--navy-ink); color: #fff; }
+  .products h2 { color: #fff; }
+  .products .kicker { color: var(--gold-light); }
+  .products .lead { color: var(--sky); }
+  .product { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 68px); align-items: center; text-decoration: none; }
+  .product + .product { margin-top: clamp(56px, 7vw, 96px); }
+  .product.flip { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); }
+  .product.flip .shot { order: 2; }
+  .shot { position: relative; aspect-ratio: 1320/820; overflow: hidden; border-radius: 12px; background: var(--navy-deep); box-shadow: 0 0 0 1px rgba(197,214,239,.25), 0 34px 60px -30px #000; transition: transform .25s; }
+  .product:hover .shot { transform: translateY(-5px); }
+  .shot iframe { position: absolute; top: 0; left: 0; width: 1320px; height: 820px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .product-copy { display: grid; gap: 14px; justify-items: start; }
+  .product-copy h3 { font: 700 clamp(1.7rem, 3vw, 2.5rem)/1.12 var(--display); }
+  .product-copy p { color: var(--sky); }
+  .ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; color: #e2eaf6; font-size: .98rem; }
+  .ticks li::before { content: "✓"; color: var(--gold-light); margin-inline-end: 9px; font-weight: 600; }
+  .open { display: inline-flex; margin-top: 6px; padding: 11px 20px; border-radius: 9px; background: #fff; color: var(--navy-deep); font-weight: 600; }
+  .product:hover .open { background: var(--gold-light); }
 
-  .contact { color: #fff; background: linear-gradient(160deg, var(--navy-deep), var(--navy-ink)); }
-  .contact-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) auto; gap: clamp(24px, 6vw, 70px); align-items: center; }
-  .contact h2 { color: #fff; margin-bottom: 10px; }
-  .contact p { color: var(--sky); }
-  .btn { display: inline-flex; align-items: center; min-height: 52px; padding: 12px 26px; border-radius: 10px; font-weight: 600; text-decoration: none; background: var(--coral); color: #fff; white-space: nowrap; }
-  .btn:hover { background: var(--coral-deep); }
-  footer { background: var(--navy-ink); color: var(--sky); padding-block: 16px; font-size: .86rem; border-top: 1px solid rgba(255,255,255,.08); }
+  /* Who handles what */
+  .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-radius: 18px; overflow: hidden; box-shadow: 0 26px 50px -34px rgba(22,43,77,.6); }
+  .side { padding: clamp(26px, 4vw, 48px); display: grid; gap: 18px; align-content: start; }
+  .side.bot { background: var(--white); }
+  .side.staff { background: var(--navy); color: #fff; }
+  .side h3 { font: 700 clamp(1.5rem, 2.6vw, 2.1rem)/1.15 var(--display); }
+  .side ul { list-style: none; margin: 0; padding: 0; display: grid; }
+  .side li { padding-block: 12px; border-top: 1px solid var(--line); }
+  .side.staff li { border-color: rgba(255,255,255,.2); }
+  .note { margin-top: 18px; color: var(--muted); max-width: 46em; }
+
+  .gains { background: var(--white); }
+  .gain-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--navy); }
+  .gain-list li { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 6px clamp(20px, 6vw, 80px); padding-block: 22px; border-bottom: 1px solid var(--line); align-items: baseline; }
+  .gain-list h3 { font: 600 clamp(1.2rem, 2vw, 1.55rem)/1.25 var(--display); color: var(--coral-deep); }
+
+  .contact { color: #fff; background: radial-gradient(620px 340px at 88% 0, rgba(228,100,79,.3), transparent 65%), linear-gradient(160deg, var(--navy), var(--navy-deep)); }
+  .contact-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) auto; gap: clamp(24px, 6vw, 70px); align-items: end; }
+  .contact h2 { color: #fff; margin-bottom: 14px; font-size: clamp(2.3rem, 5.6vw, 4.4rem); }
+  .contact p { color: var(--sky); font-size: 1.12rem; max-width: 34em; }
+  footer { background: var(--navy-ink); color: var(--sky); padding-block: 18px; font-size: .86rem; }
   .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; }
 
-  @media (max-width: 860px) {
-    .doors, .contact-grid, .fixes li { grid-template-columns: minmax(0, 1fr); }
-    .feats { grid-template-columns: minmax(0, 1fr); }
+  @media (max-width: 980px) {
+    .bar nav { display: none; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr); }
+    .hero-copy { padding-bottom: 8px; }
+    .scene { min-height: 500px; width: min(100%, 560px); margin-inline: auto; }
+    .journey { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+    .journey::before { top: 20px; bottom: 60px; inset-inline: 25px auto; border-top: 0; border-inline-start: 2px dashed var(--sky); }
+    .journey li { grid-template-columns: 52px minmax(0, 1fr); justify-items: start; text-align: start; padding-inline: 0; column-gap: 18px; }
+    .journey li::before { grid-row: span 2; }
+    .journey h3 { margin-top: 0; }
+    .product, .product.flip, .split, .contact-grid, .gain-list li { grid-template-columns: minmax(0, 1fr); }
+    .product.flip .shot { order: 0; }
   }
-  @media (max-width: 560px) {
-    .door-body { grid-template-columns: minmax(0, 1fr); }
-    .go { grid-row: auto; grid-column: 1; justify-self: start; margin-top: 8px; }
+  @media (max-width: 480px) {
+    .cta .btn { width: 100%; }
+    .scene { min-height: 450px; }
+    .browser { display: none; }
+    .phone { inset-inline: 0; margin-inline: auto; width: min(84%, 310px); }
+    .contact .btn { white-space: normal; overflow-wrap: anywhere; }
   }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .door { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .bubble { animation: none; } .shot, .btn { transition: none; } }
+
+  html[lang="ar"] { --display: "Alexandria", "Segoe UI", Tahoma, sans-serif; --body: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif; }
+  html[lang="bn"] { --display: "Hind Siliguri", "Nirmala UI", "Segoe UI", sans-serif; --body: "Hind Siliguri", "Nirmala UI", "Segoe UI", sans-serif; }
+  html[lang="ar"] h1, html[lang="ar"] h2, html[lang="bn"] h1, html[lang="bn"] h2 { line-height: 1.32; letter-spacing: 0; font-weight: 600; }
+  html[lang="ar"] h1 em, html[lang="bn"] h1 em { font-style: normal; }
+  html[lang="ar"] h1, html[lang="bn"] h1 { font-size: clamp(2.5rem, 5vw, 4.3rem); }
+  .bar .tabs { margin-inline-start: 0; flex: none; }
+  .bar nav + .tabs { margin-inline-start: 4px; }
+  .bar .contact-link { flex: none; }
+  .logo { direction: ltr; }
+  .site-hero { padding: 30px 0 0; padding-inline-start: 24px; }
+  .site-hero h4 { padding-inline-end: 8px; }
+  .chooser { position: fixed; inset: 0; margin: auto; height: fit-content; max-height: calc(100dvh - 24px); overflow-y: auto; }
+  .tiers-band { background: var(--white); }
+  .tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 24px); align-items: stretch; }
+  .tier { position: relative; display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--line); border-radius: 16px; padding: clamp(22px, 2.6vw, 32px); min-width: 0; }
+  .tier.main { background: var(--navy-deep); border-color: var(--navy-deep); color: #fff; }
+  .tier h3 { font: 700 clamp(1.5rem, 2.4vw, 2rem)/1.2 var(--display); color: var(--navy-deep); }
+  .tier.main h3 { color: #fff; }
+  .tier-sub { color: var(--muted); }
+  .tier.main .tier-sub { color: var(--sky); }
+  .pop { align-self: flex-start; background: var(--gold-light); color: var(--navy-ink); font-size: .82rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+  .tier ul { list-style: none; margin: 12px 0 18px; padding: 0; display: grid; gap: 9px; font-size: .98rem; flex: 1; align-content: start; }
+  .tier li { position: relative; padding-inline-start: 22px; }
+  .tier li::before { content: "✓"; position: absolute; inset-inline-start: 0; color: var(--coral-deep); font-weight: 700; }
+  .tier.main li::before { color: var(--gold-light); }
+  .tier li.inherit { font-weight: 600; }
+  .tier-go { display: flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 9px; border: 1px solid var(--navy); color: var(--navy-deep); font-weight: 600; text-decoration: none; }
+  .tier-go:hover { background: var(--paper); }
+  .tier.main .tier-go { background: var(--coral); border-color: var(--coral); color: #fff; }
+  .tier.main .tier-go:hover { background: var(--coral-deep); }
+  .tier-note { margin-top: 20px; color: var(--muted); }
+  .chooser { border: 0; border-radius: 20px; padding: clamp(24px, 4vw, 40px); width: min(460px, calc(100vw - 32px)); background: var(--navy); color: #fff; text-align: center; }
+  .chooser::backdrop { background: rgba(18,36,64,.78); }
+  .chooser img { height: 76px; width: auto; margin-inline: auto; display: block; }
+  .chooser h2 { color: #fff; font: 600 1.15rem/1.5 var(--script); display: grid; gap: 2px; margin-block: 8px 20px; letter-spacing: 0; }
+  .choices { display: grid; gap: 10px; }
+  .choices button { min-height: 58px; border-radius: 12px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.1); color: #fff; font: 600 1.25rem var(--script); }
+  .choices button:hover { background: #fff; color: var(--navy-deep); }
+  @media (max-width: 980px) { .tiers { grid-template-columns: minmax(0, 1fr); } .bar .tabs { margin-inline-start: auto; } }
+  @media (max-width: 620px) { .bar { flex-wrap: wrap; gap: 8px 12px; } .bar .contact-link { display: none; } .tabs button { padding: 6px 10px; } }
 </style>
 </head>
 <body>
+
+<dialog class="chooser" id="chooser" aria-labelledby="chooseTitle">
+  <img src="assets/metanor-logo.png" alt="Metanor" width="614" height="200">
+  <h2 id="chooseTitle"><span lang="ar" dir="rtl">اختر لغتك</span><span lang="en">Choose your language</span><span lang="bn">আপনার ভাষা বেছে নিন</span></h2>
+  <div class="choices">
+    <button type="button" data-choose="ar" lang="ar" dir="rtl">العربية</button>
+    <button type="button" data-choose="en" lang="en">English</button>
+    <button type="button" data-choose="bn" lang="bn">বাংলা</button>
+  </div>
+</dialog>
 
 <header class="hero">
   <div class="wrap">
     <div class="bar">
       <img class="logo" src="assets/metanor-logo.png" alt="Metanor" width="614" height="200">
-      <a href="#contact">Contact us</a>
+      <nav aria-label="Main">
+        <a href="#journey" data-t="navHow"></a>
+        <a href="#demos" data-t="navDemos"></a>
+        <a href="#packages" data-t="navPackages"></a>
+      </nav>
+      <div class="tabs" role="group" aria-label="Language">
+        <button type="button" data-lang="ar" lang="ar">العربية</button>
+        <button type="button" data-lang="en" lang="en">English</button>
+        <button type="button" data-lang="bn" lang="bn">বাংলা</button>
+      </div>
+      <a class="contact-link" href="#contact" data-t="navContact"></a>
     </div>
-    <div class="hero-copy">
-      <p class="eyebrow">Metanor solutions for clinics</p>
-      <h1>Metanor Clinic Suite</h1>
-      <p class="lede">A website your patients can read in their own language, and a WhatsApp assistant that answers them, books their visit and hands over to your staff. Try both demos below.</p>
-      <div class="langs" aria-label="Languages"><span class="bn" lang="bn">বাংলা</span><span>English</span><span class="ar" lang="ar" dir="rtl">العربية</span></div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="kicker">Metanor Clinic Suite</p>
+        <h1><span data-t="h1a"></span> <em data-t="h1b"></em></h1>
+        <p class="lead" data-t="lede"></p>
+        <div class="cta">
+          <a class="btn btn-coral" href="demos/whatsapp-assistant/" data-t="ctaWa"></a>
+          <a class="btn btn-ghost" href="demos/clinic-website/" data-t="ctaSite"></a>
+        </div>
+      </div>
+      <div class="scene" role="img" data-t-label="sceneAlt">
+        <div class="browser">
+          <div class="chrome"><i></i><i></i><i></i></div>
+          <div class="site-top"><span class="badge">SM</span><span data-t="clinic"></span></div>
+          <div class="site-hero"><h4 data-t="siteTitle"></h4><div class="site-arch"></div></div>
+        </div>
+        <div class="phone"><div class="screen">
+          <div class="chat-head"><span class="av">SM</span><span data-t="clinic"></span></div>
+          <div class="log" id="log"></div>
+        </div></div>
+      </div>
     </div>
   </div>
 </header>
 
 <main>
-  <div class="wrap doors">
-    <a class="door" href="demos/clinic-website/">
-      <div class="stage web" aria-hidden="true">
-        <div class="mini-site">
-          <b>Sample Family Clinic <small>বাংলা · EN · عربي</small></b>
-          <div class="mini-hero"><img src="demos/clinic-website/assets/facade.svg" alt=""><span>Family care, close to home</span></div>
-        </div>
-      </div>
-      <div class="door-body">
-        <h2>Clinic website</h2>
-        <span class="go">View site</span>
-        <p>In Bengali, English and Arabic, with services, doctors and WhatsApp booking.</p>
-      </div>
-    </a>
-    <a class="door" href="demos/whatsapp-assistant/">
-      <div class="stage chat" aria-hidden="true">
-        <div class="mini-phone"><div class="mini-screen">
-          <div class="mini-head">Sample Family Clinic</div>
-          <div class="mini-log">
-            <span>Assalamu alaikum! How can we help today?</span>
-            <span class="me">I'd like to book a visit</span>
-            <span>Done. Your booking token is ready:</span>
-            <span class="tok">Token A-14 · Tue 10:30</span>
-          </div>
-        </div></div>
-      </div>
-      <div class="door-body">
-        <h2>WhatsApp assistant</h2>
-        <span class="go">Try the demo</span>
-        <p>Patient chats, booking tokens, staff handover and a campaign view.</p>
-      </div>
-    </a>
-  </div>
-
-  <section>
+  <section id="journey">
     <div class="wrap">
-      <div class="head"><h2>Where do clinics lose patients?</h2><p>Four everyday problems, each with a practical fix.</p></div>
-      <ul class="fixes">
-        <li><h3>Messages left unanswered</h3><p>The assistant replies instantly about timings, services and location, and takes bookings at any hour.</p></li>
-        <li><h3>Long waits at the front desk</h3><p>Patients receive a booking token on WhatsApp and arrive at the right time.</p></li>
-        <li><h3>Patients who can't read the website</h3><p>Every page is available in Bengali, English and Arabic, switched with one tap.</p></li>
-        <li><h3>Reminders that never go out</h3><p>The campaign view sends health reminders and clinic announcements to the right patients.</p></li>
-      </ul>
+      <div class="head"><p class="kicker" data-t="howEye"></p><h2 data-t="howTitle"></h2></div>
+      <ol class="journey" id="steps"></ol>
     </div>
   </section>
 
-  <section class="feat-band">
+  <section class="products" id="demos">
     <div class="wrap">
-      <div class="head"><h2>What's included</h2><p>Everything is tailored to your clinic's services, doctors, timings and branding.</p></div>
-      <div class="feats">
-        <div class="feat"><i>1</i><h3>Multilingual website</h3><p>A premium, mobile-friendly site in three languages.</p></div>
-        <div class="feat"><i>2</i><h3>WhatsApp booking</h3><p>Patients book from the app they already use every day.</p></div>
-        <div class="feat"><i>3</i><h3>Staff handover</h3><p>Any chat can be passed to a person whenever it's needed.</p></div>
-        <div class="feat"><i>4</i><h3>Booking tokens</h3><p>Clear queue numbers and visit times sent to the patient.</p></div>
-        <div class="feat"><i>5</i><h3>Campaigns</h3><p>Vaccination drives, new clinic hours and follow-up reminders.</p></div>
-        <div class="feat"><i>6</i><h3>Set up for you</h3><p>We configure it with your clinic's details and get you started.</p></div>
+      <div class="head"><p class="kicker" data-t="demoEye"></p><h2 data-t="demoTitle"></h2><p class="lead" data-t="demoLead"></p></div>
+      <a class="product" href="demos/clinic-website/">
+        <div class="shot"><iframe src="demos/clinic-website/" title="Clinic website preview" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="product-copy"><h3 data-t="siteH"></h3><p data-t="siteP"></p><ul class="ticks" id="siteTicks"></ul><span class="open" data-t="siteGo"></span></div>
+      </a>
+      <a class="product flip" href="demos/whatsapp-assistant/">
+        <div class="shot"><iframe src="demos/whatsapp-assistant/" title="WhatsApp assistant preview" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="product-copy"><h3 data-t="waH"></h3><p data-t="waP"></p><ul class="ticks" id="waTicks"></ul><span class="open" data-t="waGo"></span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="tiers-band" id="packages">
+    <div class="wrap">
+      <div class="head"><p class="kicker" data-t="tierEye"></p><h2 data-t="tierTitle"></h2><p class="lead" data-t="tierLead"></p></div>
+      <div class="tiers" id="tiers"></div>
+      <p class="tier-note" data-t="tierNote"></p>
+    </div>
+  </section>
+
+  <section id="staff">
+    <div class="wrap">
+      <div class="head"><p class="kicker" data-t="staffEye"></p><h2 data-t="staffTitle"></h2></div>
+      <div class="split">
+        <div class="side bot"><h3 data-t="botH"></h3><ul id="botList"></ul></div>
+        <div class="side staff"><h3 data-t="teamH"></h3><ul id="teamList"></ul></div>
       </div>
     </div>
   </section>
 
   <section class="contact" id="contact">
     <div class="wrap contact-grid">
-      <div>
-        <h2>Bring this to your clinic</h2>
-        <p>Tell us about your clinic and we'll show you how it would look with your own services and branding.</p>
-      </div>
-      <a class="btn" href="mailto:contact@metanor.org?subject=Metanor%20Clinic%20Suite">contact@metanor.org</a>
+      <div><h2 data-t="contactTitle"></h2><p data-t="contactText"></p></div>
+      <a class="btn btn-coral" href="mailto:contact@metanor.org?subject=Metanor%20Clinic%20Suite">contact@metanor.org</a>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <span>© 2026 Metanor</span>
-    <span>Demos only. Sample data, not connected to a clinic, WhatsApp or patient records.</span>
-  </div>
+  <div class="wrap foot"><span>© 2026 Metanor</span><span data-t="foot"></span></div>
 </footer>
+
+<script>
+(() => {
+  const T = {
+    ar: {
+      navHow: 'كيف يعمل', navDemos: 'العروض', navPackages: 'الباقات', navContact: 'تواصل معنا', h1a: 'كل مريض يحصل على رد،', h1b: 'بلغته.', lede: 'موقع للعيادة ومساعد واتساب يجيبان عن الأسئلة الشائعة ويحجزان المواعيد ويحوّلان الباقي إلى فريقك.', ctaWa: 'جرّب عرض واتساب', ctaSite: 'شاهد موقع العيادة', sceneAlt: 'موقع عيادة نموذجية ومحادثة حجز عبر واتساب', clinic: 'المجمع الطبي النموذجي', siteTitle: 'رعاية طبية لكل العائلة',
+      chat: ['السلام عليكم! كيف يمكنني مساعدتك؟', 'أبغى أحجز موعد يوم الأحد', 'ما الوقت المناسب؟', '4:30 م'], token: 'تم حجز موعدك. رقم الدور:',
+      howEye: 'كيف يعمل', howTitle: 'من المنشور إلى الاستقبال، دون رسائل متكررة.', steps: [['امسح', 'رمز QR على منشور أو إعلان يفتح محادثة العيادة.'], ['اسأل', 'يحصل المريض على الأسعار والمواعيد والموقع بلغته.'], ['احجز', 'يختار القسم والوقت بضغطات قليلة.'], ['تذكير', 'رسالة يؤكد بها أو يغيّر أو يلغي موعده.'], ['الوصول', 'يعرض رقم دوره في الاستقبال، ويعرف الفريق من سيأتي.']],
+      demoEye: 'عرضان مباشران', demoTitle: 'افتحهما وجرّبهما بنفسك.', demoLead: 'كلاهما يستخدم عيادة نموذجية، لذا يمكنك تجربة كل شيء بأمان.', siteH: 'موقع يستطيع المرضى قراءته', siteP: 'الساعات والموقع والأقسام والحجز عبر واتساب، وكلها سهلة الوصول.', siteTicks: ['العربية والإنجليزية والبنغالية', 'دليل «أي طبيب أحتاج؟»', 'أسعار نموذجية وحجز عبر واتساب'], siteGo: 'شاهد الموقع', waH: 'استقبال يجيب عبر واتساب', waP: 'بدّل بين الباقات الثلاث وتابع المريض من أول سؤال حتى الحجز.', waTicks: ['ثلاث باقات قابلة للتبديل', 'أرقام الدور والتذكيرات', 'جهة العيادة كاملة'], waGo: 'جرّب المساعد',
+      tierEye: 'الباقات', tierTitle: 'ثلاث باقات تناسب كل مرحلة', tierLead: 'ابدأ بما تحتاجه الآن، ورقِّ باقتك عندما تكون جاهزاً.', tierNote: 'نحدد السعر بعد معرفة احتياجات عيادتك. كل باقة تشمل رسوم تأسيس واشتراكاً شهرياً.', tryTier: 'جرّب هذه الباقة', popular: 'الأكثر طلباً',
+      tiers: [{ n: 'الأساسية', s: 'رد فوري وحجوزات جديدة', i: ['موقع بثلاث لغات', 'مساعد واتساب على مدار الساعة', 'الحجز عبر واتساب', 'أرقام الدور', 'دليل أي طبيب أحتاج؟', 'طلب تقييمات Google', 'تحويل آمن إلى الفريق'] }, { n: 'النمو', s: 'مواعيد ممتلئة ومرضى يعودون', main: true, i: ['كل ما في الأساسية', 'تذكير المواعيد', 'قائمة انتظار تلقائية', 'تنظيم الأيام المزدحمة', 'تذكير الفحص واللقاح', 'إشعار جاهزية النتائج', 'تعليمات ما بعد الزيارة', 'مسار الحالات العاجلة'] }, { n: 'المجمع المتكامل', s: 'إدارة كل شيء من مكان واحد', i: ['كل ما في النمو', 'متابعة الفحوصات والتحويلات', 'النموذج الصحي قبل الزيارة', 'لوحة الفريق', 'تتبع الحملات', 'طلبات الشركات والمجموعات', 'تقرير شهري لصاحب المجمع'] }],
+      staffEye: 'فريقك يبقى المسؤول', staffTitle: 'المهام المتكررة للمساعد، والقرار لفريقك.', botH: 'يتولى المساعد', teamH: 'يتولى فريقك', bot: ['الساعات والموقع والعروض المعتمدة', 'اختيار القسم والوقت', 'أرقام الدور والتذكيرات', 'التغيير والإلغاء'], team: ['الأسئلة والنصائح الطبية', 'الحالات الطارئة المحتملة مع تنبيه فوري', 'التأمين والطلبات الخاصة', 'كل ما لا يتأكد منه المساعد'],
+      contactTitle: 'شاهده باسم عيادتك.', contactText: 'أخبرنا عن عيادتك وسنريك كيف سيبدو بخدماتك وأطبائك وهويتك.', foot: 'عروض تجريبية ببيانات نموذجية، غير متصلة بعيادة أو واتساب أو سجلات مرضى.'
+    },
+    en: {
+      navHow: 'How it works', navDemos: 'Demos', navPackages: 'Packages', navContact: 'Contact us', h1a: 'Every patient answered,', h1b: 'in their own language.', lede: 'A clinic website and WhatsApp assistant that answer common questions, book visits and pass the rest to your staff.', ctaWa: 'Try the WhatsApp demo', ctaSite: 'View the clinic website', sceneAlt: 'A sample clinic website and WhatsApp booking chat', clinic: 'Sample Medical Complex', siteTitle: 'Care for the whole family',
+      chat: ['Assalamu alaikum! How can I help?', 'I’d like to book a visit on Sunday', 'What time suits you?', '4:30 PM'], token: 'Your visit is booked. Your token number:',
+      howEye: 'How it works', howTitle: 'From a flyer to the front desk, without the back-and-forth.', steps: [['Scan', 'A QR code on a flyer or ad opens the clinic’s chat.'], ['Ask', 'Patients get fees, hours and directions in their language.'], ['Book', 'They choose a department and time in a few taps.'], ['Get reminded', 'A reminder lets them confirm, change or cancel.'], ['Arrive', 'They show their token at reception, and staff know who’s coming.']],
+      demoEye: 'Two live demos', demoTitle: 'Open them and try them yourself.', demoLead: 'Both use a sample clinic, so you can click through everything safely.', siteH: 'A clinic website patients can actually read', siteP: 'Hours, directions, departments and WhatsApp booking, all easy to find.', siteTicks: ['Arabic, English and Bengali', 'A “Which doctor do I need?” finder', 'Sample prices and WhatsApp booking'], siteGo: 'View the website', waH: 'A front desk that answers on WhatsApp', waP: 'Switch between all three packages and follow a patient from first question to booked visit.', waTicks: ['Three switchable packages', 'Booking tokens and reminders', 'The full clinic-side view'], waGo: 'Try the assistant',
+      tierEye: 'Packages', tierTitle: 'Three packages for every stage', tierLead: 'Start with what you need now, and upgrade when you’re ready.', tierNote: 'We set the price once we understand your clinic’s needs. Each package has a setup fee and monthly plan.', tryTier: 'Try this package', popular: 'Most popular',
+      tiers: [{ n: 'Starter', s: 'Instant replies, new bookings', i: ['Three-language website', '24/7 WhatsApp assistant', 'WhatsApp booking', 'Booking tokens', '“Which doctor do I need?” finder', 'Google review requests', 'Safe handover to staff'] }, { n: 'Growth', s: 'Fuller schedules, returning patients', main: true, i: ['Everything in Starter', 'Visit reminders', 'Automatic waiting list', 'Busy-day slots and queue', 'Check-up and vaccine recall', 'Lab results ready notices', 'After-visit instructions', 'Same-day urgent flow'] }, { n: 'Full Clinic', s: 'Run it all from one place', i: ['Everything in Growth', 'Test and referral follow-up', 'Pre-visit patient form', 'Staff dashboard', 'Campaign tracking', 'Employer and group enquiries', 'Monthly owner report'] }],
+      staffEye: 'Your staff stay in charge', staffTitle: 'The routine goes to the assistant. The judgment stays with people.', botH: 'The assistant handles', teamH: 'Your team handles', bot: ['Hours, location and offers you’ve approved', 'Choosing a department and time', 'Booking tokens and reminders', 'Changes and cancellations'], team: ['Medical questions and advice', 'Possible emergencies, with an instant alert', 'Insurance and special requests', 'Anything the assistant isn’t sure about'],
+      contactTitle: 'See it with your clinic’s name on it.', contactText: 'Tell us about your clinic, and we’ll show you how this would look with your services, doctors and branding.', foot: 'Demos only. Sample data, not connected to a clinic, WhatsApp or patient records.'
+    },
+    bn: {
+      navHow: 'কীভাবে কাজ করে', navDemos: 'ডেমো', navPackages: 'প্যাকেজ', navContact: 'যোগাযোগ', h1a: 'প্রত্যেক রোগী উত্তর পাবেন,', h1b: 'নিজের ভাষায়।', lede: 'ক্লিনিকের ওয়েবসাইট ও হোয়াটসঅ্যাপ সহকারী সাধারণ প্রশ্নের উত্তর দেয়, ভিজিট বুক করে এবং বাকিটা আপনার স্টাফের কাছে পাঠায়।', ctaWa: 'হোয়াটসঅ্যাপ ডেমো দেখুন', ctaSite: 'ক্লিনিকের ওয়েবসাইট দেখুন', sceneAlt: 'নমুনা ক্লিনিকের ওয়েবসাইট ও হোয়াটসঅ্যাপ বুকিং চ্যাট', clinic: 'স্যাম্পল মেডিকেল কমপ্লেক্স', siteTitle: 'পুরো পরিবারের চিকিৎসা',
+      chat: ['আসসালামু আলাইকুম! কীভাবে সাহায্য করতে পারি?', 'রবিবার ভিজিট বুক করতে চাই', 'কোন সময়ে আসতে চান?', 'বিকাল ৪:৩০'], token: 'আপনার ভিজিট বুক হয়েছে। টোকেন নম্বর:',
+      howEye: 'কীভাবে কাজ করে', howTitle: 'ফ্লায়ার থেকে রিসেপশন পর্যন্ত, বারবার মেসেজ ছাড়াই।', steps: [['স্ক্যান', 'ফ্লায়ার বা বিজ্ঞাপনের QR কোড ক্লিনিকের চ্যাট খোলে।'], ['জিজ্ঞেস', 'রোগী নিজের ভাষায় ফি, সময় ও ঠিকানা পান।'], ['বুক', 'কয়েক ট্যাপে বিভাগ ও সময় বেছে নেন।'], ['রিমাইন্ডার', 'রিমাইন্ডার থেকে নিশ্চিত, পরিবর্তন বা বাতিল করেন।'], ['আগমন', 'রিসেপশনে টোকেন দেখান, স্টাফ আগেই জানেন কে আসছেন।']],
+      demoEye: 'দুটি লাইভ ডেমো', demoTitle: 'খুলে নিজেই চেষ্টা করুন।', demoLead: 'দুটিতেই নমুনা ক্লিনিক ব্যবহার করা হয়েছে, তাই নিরাপদে সবকিছু দেখতে পারেন।', siteH: 'রোগীরা পড়তে পারেন এমন ওয়েবসাইট', siteP: 'সময়, ঠিকানা, বিভাগ ও হোয়াটসঅ্যাপ বুকিং, সব সহজে পাওয়া যায়।', siteTicks: ['আরবি, ইংরেজি ও বাংলা', '“কোন ডাক্তার দরকার?” গাইড', 'নমুনা দাম ও হোয়াটসঅ্যাপ বুকিং'], siteGo: 'ওয়েবসাইট দেখুন', waH: 'হোয়াটসঅ্যাপে উত্তর দেওয়া রিসেপশন', waP: 'তিন প্যাকেজের মধ্যে বদলে দেখুন, প্রথম প্রশ্ন থেকে বুকিং পর্যন্ত।', waTicks: ['বদলানো যায় এমন তিন প্যাকেজ', 'বুকিং টোকেন ও রিমাইন্ডার', 'ক্লিনিকের দিকের সম্পূর্ণ ভিউ'], waGo: 'সহকারী দেখুন',
+      tierEye: 'প্যাকেজ', tierTitle: 'প্রতিটি ধাপের জন্য তিনটি প্যাকেজ', tierLead: 'এখন যা দরকার তা দিয়ে শুরু করুন, প্রস্তুত হলে আপগ্রেড করুন।', tierNote: 'আপনার ক্লিনিকের প্রয়োজন বুঝে দাম ঠিক করা হবে। প্রতিটি প্যাকেজে সেটআপ ফি ও মাসিক প্ল্যান আছে।', tryTier: 'এই প্যাকেজ দেখুন', popular: 'সবচেয়ে জনপ্রিয়',
+      tiers: [{ n: 'স্টার্টার', s: 'তাৎক্ষণিক উত্তর, নতুন বুকিং', i: ['তিন ভাষার ওয়েবসাইট', '২৪/৭ হোয়াটসঅ্যাপ সহকারী', 'হোয়াটসঅ্যাপ বুকিং', 'বুকিং টোকেন', '“কোন ডাক্তার দরকার?” গাইড', 'গুগল রিভিউ অনুরোধ', 'স্টাফের কাছে নিরাপদ হস্তান্তর'] }, { n: 'গ্রোথ', s: 'পূর্ণ সময়সূচি, ফিরে আসা রোগী', main: true, i: ['স্টার্টারের সবকিছু', 'ভিজিটের রিমাইন্ডার', 'স্বয়ংক্রিয় অপেক্ষার তালিকা', 'ব্যস্ত দিনের স্লট ও সিরিয়াল', 'চেকআপ ও টিকার রিমাইন্ডার', 'ফলাফল প্রস্তুতের বার্তা', 'ভিজিটের পরের নির্দেশনা', 'একই দিনের জরুরি ব্যবস্থা'] }, { n: 'ফুল ক্লিনিক', s: 'সবকিছু এক জায়গা থেকে', i: ['গ্রোথের সবকিছু', 'টেস্ট ও রেফারেল ফলো-আপ', 'ভিজিটের আগের ফর্ম', 'স্টাফ ড্যাশবোর্ড', 'প্রচারণা ট্র্যাকিং', 'কোম্পানি ও গ্রুপ অনুরোধ', 'মালিকের মাসিক রিপোর্ট'] }],
+      staffEye: 'দায়িত্বে থাকে আপনার স্টাফ', staffTitle: 'নিয়মিত কাজ সহকারীর, সিদ্ধান্ত মানুষের।', botH: 'সহকারী সামলায়', teamH: 'আপনার টিম সামলায়', bot: ['অনুমোদিত সময়, ঠিকানা ও অফার', 'বিভাগ ও সময় বেছে নেওয়া', 'বুকিং টোকেন ও রিমাইন্ডার', 'পরিবর্তন ও বাতিল'], team: ['চিকিৎসা-সংক্রান্ত প্রশ্ন ও পরামর্শ', 'সম্ভাব্য জরুরি অবস্থা, সাথে সাথে সতর্কতা', 'ইন্সুরেন্স ও বিশেষ অনুরোধ', 'সহকারী নিশ্চিত নয় এমন সবকিছু'],
+      contactTitle: 'আপনার ক্লিনিকের নামে দেখুন।', contactText: 'আপনার ক্লিনিক সম্পর্কে জানান, আমরা আপনার সেবা, ডাক্তার ও ব্র্যান্ডিংসহ দেখাব।', foot: 'শুধু ডেমো। নমুনা তথ্য, কোনো ক্লিনিক, হোয়াটসঅ্যাপ বা রোগীর রেকর্ডের সাথে যুক্ত নয়।'
+    }
+  };
+
+  const $ = id => document.getElementById(id);
+  const make = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const items = (id, list) => $(id).replaceChildren(...list.map(x => make('li', '', x)));
+  let lang = document.documentElement.lang;
+
+  function save() { try { localStorage.setItem('clinicSuiteLang', lang); sessionStorage.setItem('clinicSuiteChosen', '1'); } catch (e) {} }
+  function reloadPreviews() { document.querySelectorAll('.shot iframe').forEach(f => { f.src = f.getAttribute('src'); }); }
+
+  function render() {
+    const t = T[lang];
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-t]').forEach(n => { n.textContent = t[n.dataset.t]; });
+    document.querySelectorAll('[data-t-label]').forEach(n => n.setAttribute('aria-label', t[n.dataset.tLabel]));
+    document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    const log = t.chat.map((text, i) => make('div', 'bubble' + (i % 2 ? ' me' : ''), text));
+    const token = make('div', 'bubble token');
+    token.append(make('span', '', t.token), make('b', '', 'A-17'));
+    $('log').replaceChildren(...log, token);
+    $('steps').replaceChildren(...t.steps.map(([k, v]) => { const li = make('li'); li.append(make('h3', '', k), make('p', '', v)); return li; }));
+    items('siteTicks', t.siteTicks); items('waTicks', t.waTicks); items('botList', t.bot); items('teamList', t.team);
+    $('tiers').replaceChildren(...t.tiers.map((x, i) => {
+      const c = make('article', 'tier' + (x.main ? ' main' : ''));
+      if (x.main) c.append(make('span', 'pop', t.popular));
+      c.append(make('h3', '', x.n), make('p', 'tier-sub', x.s));
+      const ul = make('ul'); x.i.forEach((f, j) => ul.append(make('li', i > 0 && j === 0 ? 'inherit' : '', f)));
+      const a = make('a', 'tier-go', t.tryTier); a.href = `demos/whatsapp-assistant/#tier${i + 1}`;
+      c.append(ul, a);
+      return c;
+    }));
+  }
+
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => { if (b.dataset.lang === lang) return; lang = b.dataset.lang; save(); render(); reloadPreviews(); }));
+  const dlg = $('chooser');
+  dlg.querySelectorAll('[data-choose]').forEach(b => b.addEventListener('click', () => { const changed = b.dataset.choose !== lang; lang = b.dataset.choose; save(); render(); dlg.close(); if (changed) reloadPreviews(); }));
+  dlg.addEventListener('cancel', () => { save(); });
+
+  const fit = shot => { shot.firstElementChild.style.transform = `scale(${shot.clientWidth / 1320})`; };
+  const shots = document.querySelectorAll('.shot');
+  shots.forEach(fit);
+  if ('ResizeObserver' in window) { const w = new ResizeObserver(es => es.forEach(e => fit(e.target))); shots.forEach(s => w.observe(s)); }
+  else addEventListener('resize', () => shots.forEach(fit));
+
+  render();
+  let seen = false;
+  try { seen = sessionStorage.getItem('clinicSuiteChosen') === '1'; } catch (e) {}
+  if (!seen && dlg.showModal) dlg.showModal();
+})();
+</script>
 </body>
 </html>
